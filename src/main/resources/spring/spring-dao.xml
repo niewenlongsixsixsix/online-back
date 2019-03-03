@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+    <!--引入数据库连接信息的外部文件-->
+    <context:property-placeholder location="classpath:db-config.properties"/>
+
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${user}"/>
+        <property name="password" value="${password}"/>
+        <property name="driverClass" value="${driver}"/>
+        <property name="jdbcUrl" value="${url}"/>
+    </bean>
+
+    <!--这里以前应该配置jdbcTemplate，但是我们现在用的是mybatis，所以应该配置spring-maytis的整合bean-->
+    <!--配置sqlSessionFactory，因为sqlSession需要连接数据库，也需要从mybatis配置文件中创建，而且所有的mapper配置文件应该配置到xml文件中
+        所以应当配置数据源，mybatis配置文件的位置，mapper的位置
+    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+
+    </bean>
+
+    <!--配置好之后我们应当将dao层注入到我们的IOC容器中-->
+    <!--不能能用context:component-scan-->
+    <!--<mybatis:scan base-package="com.czxy.back.dao"/>-->
+    <!-- 配置扫描Dao接口包，动态实现Dao接口，注入到spring容器中 -->
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.czxy.back.dao"/>
+    </bean>
+
+</beans>
+
