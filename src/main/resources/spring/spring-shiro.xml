@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="successUrl" value="/main"/>
+        <property name="filters">
+            <map>
+                <entry key="myAdviceFilter" value-ref="myAdviceFilter"/>
+            </map>
+        </property>
+        <property name="filterChainDefinitions">
+            <value>
+                /login = anon
+                /account/login = anon
+                /register = anon
+                /account/insertAccount = anon
+                /* = user
+            </value>
+        </property>
+    </bean>
+
+    <bean class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" id="securityManager">
+        <property name="sessionManager" ref="sessionManager"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+        <property name="realm" ref="realm"/>
+    </bean>
+
+    <bean class="com.jiefeng.ssm.aop.MyAdviceFilter" name="myAdviceFilter">
+
+    </bean>
+
+    <bean class="com.jiefeng.ssm.realm.MyRealm" id="realm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+    <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher" id="credentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="1"/>
+    </bean>
+
+    <!-- shiro会话管理 -->
+    <!-- 即用户登录后就是一次会话，在没有退出之前，它的所有信息都在会话中；会话可以是普通 JavaSE 环境的，也可以是如 Web 环境的 -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionIdCookie" ref="simpleCookie"/>
+        <!-- 全局的会话信息时间,,单位为毫秒  -->
+        <property name="globalSessionTimeout" value="180000"/>
+        <!-- 检测扫描信息时间间隔,单位为毫秒-->
+        <property name="sessionValidationInterval" value="60000"/>
+        <!-- 是否开启扫描 -->
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+        <!-- 去掉URL中的JSESSIONID -->
+        <property name="sessionIdUrlRewritingEnabled" value="false"/>
+    </bean>
+
+    <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
+    <bean id="simpleCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!-- 设置Cookie名字, 默认为: JSESSIONID 问题: 与SERVLET容器名冲突, 如JETTY, TOMCAT 等默认JSESSIONID,
+                                    当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
+        <property name="name" value="SHIRO-SESSIONID"/>
+        <!-- JSESSIONID的path为/用于多个系统共享JSESSIONID -->
+        <!-- <property name="path" value="/"/> -->
+        <!-- 浏览器中通过document.cookie可以获取cookie属性，设置了HttpOnly=true,在脚本中就不能的到cookie，可以避免cookie被盗用 -->
+        <property name="httpOnly" value="false"/>
+        <property name="maxAge" value="-1"/>
+    </bean>
+
+
+    <bean class="org.apache.shiro.web.servlet.SimpleCookie" id="rememberMeCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="false"/>
+        <!--记住我的cookie，保存时常30天-->
+        <property name="maxAge" value="2592000"/>
+    </bean>
+
+    <bean class="org.apache.shiro.web.mgt.CookieRememberMeManager" id="rememberMeManager">
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
+    <bean class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter" id="formAuthenticationFilter">
+        <property name="rememberMeParam" value="rememberMe"/>
+    </bean>
+</beans>

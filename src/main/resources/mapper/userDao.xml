@@ -2,6 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jiefeng.ssm.dao">
+<mapper namespace="com.jiefeng.ssm.dao.UserDao">
 
+    <select id="getUsernameByUsername" resultType="user">
+        select * from tb_user where username = #{username}
+    </select>
+
+    <select id="getUserPermission" resultType="java.lang.String">
+    select p.permission_name from tb_role_permission rp, tb_permission p where p.id = rp.permission_id and rp.role_id in(
+      select role_id
+      from tb_role r,tb_user u,tb_user_role ur where u.id = ur.user_id and r.id =ur.role_id and u.username = #{id}
+      )
+    </select>
+
+    <select id="getUserRole" resultType="java.lang.String">
+        select r.role_name from tb_user u inner join (tb_user_role ur,tb_role r) where u.id = ur.user_id and r.id = ur.role_id and  u.username = #{id};
+    </select>
 </mapper>
