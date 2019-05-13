@@ -6,9 +6,19 @@ import java.util.List;
 
 public interface UserDao {
 
-    User getUsernameByUsername(String username);
 
-    List<String> getUserPermission(String username);
+    /**
+     * 用户登录
+     * @param username
+     * @return
+     */
+    User getPasswordByUsername(String username);
 
-    List<String> getUserRole(String username);
+
+    /**
+     * 获取所有的用户信息
+     * @return
+     */
+    List<User> getAllUsers();
+
 }

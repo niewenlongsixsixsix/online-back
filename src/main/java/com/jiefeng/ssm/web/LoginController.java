@@ -1,71 +1,70 @@
 package com.jiefeng.ssm.web;
 
-import com.jiefeng.ssm.bean.LoginAccount;
-import com.jiefeng.ssm.dao.LoginAccountDao;
-import com.jiefeng.ssm.util.MD5Util;
+import com.jiefeng.ssm.bean.User;
+import com.jiefeng.ssm.dto.LoginDto;
+import com.jiefeng.ssm.enums.LoginStateEnums;
+import com.jiefeng.ssm.redis.JedisUtil;
+import com.jiefeng.ssm.service.LoginService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/account")
+@RequestMapping("/login")
 public class LoginController {
 
+    Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     @Autowired
-    private LoginAccountDao loginAccountDao;
+    private LoginService loginService;
 
-    @RequestMapping(value = "/insertAccount",method = RequestMethod.POST)
+    @Autowired
+    private JedisUtil.Strings strings;
+
+    /**
+     * 登录验证
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/AccountAuth",method = RequestMethod.POST)
     @ResponseBody
-    public boolean insertAccount(LoginAccount account){
-        String username = account.getUsername();
-        String password = account.getPassword();
+    public Map<String,Object> AccountAuth(HttpServletRequest request, @RequestBody Map map){
 
-        //对密码进行MD5加密
-        String passwordByMD5 = MD5Util.Md5Encryption(password, username);
+        Map<String,Object> modelMap = new HashMap<>();
 
-        //将用户名和加密后的密码存放到bean中
-        account.setPassword(passwordByMD5);
+        String username = (String) map.get("username");
+        String password = (String)map.get("password");
 
-        //添加账户
-        boolean result = loginAccountDao.insertLoginAccount(account);
+        logger.info("用户名: " +username + "密码: " + password);
 
-        return result;
-    }
+        LoginDto loginDto = loginService.login(new User(username, password));
 
-
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public String login(LoginAccount account){
-
-        Subject subject = SecurityUtils.getSubject();
-
-        UsernamePasswordToken token = new UsernamePasswordToken(account.getUsername(),account.getPassword());
-        token.setRememberMe(true);
-
-        try {
-            subject.login(token);
-
-        } catch (AuthenticationException e) {
-           throw e;
+        if(loginDto.getState() == LoginStateEnums.SUCCESS.getState()){
+            modelMap.put("success",true);
+            modelMap.put("describe","登录系统");
+        }else{
+            modelMap.put("success",false);
+            modelMap.put("errMsg",loginDto.getStateInfo());
         }
 
-        return "Main";
+        return modelMap;
     }
 
-    @RequestMapping("/logout")
+    @RequestMapping("/unauth")
     @ResponseBody
-    public void logout(){
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-    }
+    public Map<String,Object> login(){
+        Map<String,Object> modelMap = new HashMap<>();
 
+        modelMap.put("success",false);
+        modelMap.put("errCode",-1);
+        return modelMap;
+    }
 
 }

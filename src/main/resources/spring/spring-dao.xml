@@ -6,7 +6,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
 
     <!--引入数据库连接信息的外部文件-->
-    <context:property-placeholder location="classpath:db-config.properties"/>
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:db-config.properties"/>
 
     <!--配置数据源-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
