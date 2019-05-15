@@ -1,18 +1,18 @@
 package com.jiefeng.ssm.web;
 
 import com.jiefeng.ssm.bean.User;
-import com.jiefeng.ssm.dto.LoginDto;
+import com.jiefeng.ssm.dto.LoginExecution;
 import com.jiefeng.ssm.enums.LoginStateEnums;
 import com.jiefeng.ssm.redis.JedisUtil;
 import com.jiefeng.ssm.service.LoginService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +35,7 @@ public class LoginController {
      */
     @RequestMapping(value = "/AccountAuth",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> AccountAuth(HttpServletRequest request, @RequestBody Map map){
+    public Map<String,Object> AccountAuth(@RequestBody Map map){
 
         Map<String,Object> modelMap = new HashMap<>();
 
@@ -44,7 +44,7 @@ public class LoginController {
 
         logger.info("用户名: " +username + "密码: " + password);
 
-        LoginDto loginDto = loginService.login(new User(username, password));
+        LoginExecution loginDto = loginService.login(new User(username, password));
 
         if(loginDto.getState() == LoginStateEnums.SUCCESS.getState()){
             modelMap.put("success",true);
@@ -57,13 +57,16 @@ public class LoginController {
         return modelMap;
     }
 
-    @RequestMapping("/unauth")
+    @RequestMapping(value = "/logout",method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,Object> login(){
+    public Map<String,Object> logout(){
         Map<String,Object> modelMap = new HashMap<>();
+        Subject subject = SecurityUtils.getSubject();
 
-        modelMap.put("success",false);
-        modelMap.put("errCode",-1);
+        subject.logout();
+
+        modelMap.put("success",true);
+
         return modelMap;
     }
 

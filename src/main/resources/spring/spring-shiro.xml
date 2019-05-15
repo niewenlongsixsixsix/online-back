@@ -7,21 +7,27 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
         <property name="filters">
-            <util:map>
+            <map>
                 <entry key="authc" value-ref="myFormAuthenticationFilter"/>
-            </util:map>
+                <entry key="user" value-ref="myUserFilter"/>
+            </map>
         </property>
         <property name="filterChainDefinitions">
             <value>
-                /login/AccountAuth = anon
-                /login/unauth = anon
+                /login/** = anon
+                /register/** == anon
                 /user/getAllUser = anon
-                /** = authc
+                /** = user
             </value>
         </property>
     </bean>
 
-    <bean class="com.jiefeng.ssm.filter.MyFormAuthenticationFilter" id="myFormAuthenticationFilter">
+    <bean class="com.jiefeng.ssm.shiro.realm.filter.MyFormAuthenticationFilter" id="myFormAuthenticationFilter">
+
+    </bean>
+
+
+    <bean class="com.jiefeng.ssm.shiro.realm.filter.MyUserFilter" id="myUserFilter">
 
     </bean>
 
@@ -30,7 +36,7 @@
         <property name="rememberMeManager" ref="rememberMeManager"/>
         <property name="realm" ref="realm"/>
     </bean>
-    <bean class="com.jiefeng.ssm.realm.MyRealm" id="realm">
+    <bean class="com.jiefeng.ssm.shiro.realm.UserRealm" id="realm">
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
     </bean>
 

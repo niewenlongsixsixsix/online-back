@@ -6,14 +6,20 @@
 
 
     <!--登录使用-->
-    <select id="getPasswordByUsername" resultType="user">
-        select * from tb_user where username = #{username}
+    <select id="getPasswordByEmail" resultType="user">
+        select * from tb_user where email = #{email}
     </select>
 
     <!--获取所有用户信息-->
     <select id="getAllUsers" resultType="user">
         select * from tb_user order by id desc
     </select>
+
+    <insert id="addUser" parameterType="user">
+        insert into tb_user(username, password, phone, email, address, register_time, last_login_time, status, salt, create_by, update_by, update_time, avatar, type, age, gender)
+        VALUES (#{username},#{password},#{phone},#{email},#{address},#{registerTime},#{lastLoginTime},#{status},#{salt},
+                #{createBy.id},#{updateBy.id},#{updateTime},#{avatar},#{type},#{age},#{gender})
+    </insert>
 
 
 </mapper>

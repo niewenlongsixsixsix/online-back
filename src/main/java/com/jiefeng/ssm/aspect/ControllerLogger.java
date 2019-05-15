@@ -1,13 +1,10 @@
 package com.jiefeng.ssm.aspect;
 
 
-import com.jiefeng.ssm.bean.User;
 import com.jiefeng.ssm.beanExtend.UserExtend;
 import com.jiefeng.ssm.redis.JedisUtil;
 import org.apache.shiro.SecurityUtils;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -36,28 +33,8 @@ public class ControllerLogger {
      * 制定了这个包下的这个方法中所有的方法而不仅仅是public
      * @param joinPoint 这个参数可以获取当前执行方法的名字或者是当前执行方法的参数列表，以及其他的信息等
      */
-    @Around("execution(* com.jiefeng.ssm.web.*.* (..))")
+    @Around("execution(* com.jiefeng.ssm.web.admin.*.* (..))")
     public Object beforeMethod(ProceedingJoinPoint joinPoint){
-//        Object obj = null;
-//        UserExtend principal = (UserExtend)SecurityUtils.getSubject().getPrincipal();
-//        logger.info("principal: " + principal);
-//        //获取用户名
-//        String username = principal.getUsername();
-//        String methodName = joinPoint.getSignature().getDeclaringTypeName();
-//        List<Object> args = Arrays.asList(joinPoint.getArgs());
-//
-//        try {
-//            obj = joinPoint.proceed(args);
-//        } catch (Throwable e) {
-//            logger.error("统计某方法执行耗时环绕通知出错", e);
-//
-//        HttpServletRequest request = (HttpServletRequest) args.get(0);
-//        String ip = request.getRemoteAddr();
-//        //这句打印信息将会在匹配到的方法执行前执行
-
-//        logger.info(username + " 执行了:" + methodName +"()方法 " + "IP地址为: " + ip);
-
-        // 定义返回对象、得到方法需要的参数
         Object obj = null;
 
         UserExtend principal = (UserExtend)SecurityUtils.getSubject().getPrincipal();

@@ -2,12 +2,12 @@ package com.jiefeng.ssm.dto;
 
 import com.jiefeng.ssm.enums.LoginStateEnums;
 
-public class LoginDto {
+public class LoginExecution {
 
     private int state;
     private String stateInfo;
 
-    public LoginDto(LoginStateEnums stateEnums) {
+    public LoginExecution(LoginStateEnums stateEnums) {
         this.state = stateEnums.getState();
         this.stateInfo = stateEnums.getStateInfo();
     }

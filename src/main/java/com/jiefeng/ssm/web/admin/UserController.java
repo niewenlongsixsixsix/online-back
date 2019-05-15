@@ -1,7 +1,7 @@
-package com.jiefeng.ssm.web;
+package com.jiefeng.ssm.web.admin;
 
 
-import com.jiefeng.ssm.dto.UserDto;
+import com.jiefeng.ssm.dto.UserExecution;
 import com.jiefeng.ssm.enums.UserStateEnums;
 import com.jiefeng.ssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class UserController {
 
         Map<String,Object> modelMap = new HashMap<>();
 
-        UserDto userDto = userService.getAllUser();
+        UserExecution userDto = userService.getAllUser();
 
         //判断是否正常返回
         if(userDto.getState() == UserStateEnums.SUCCESS.getState()){

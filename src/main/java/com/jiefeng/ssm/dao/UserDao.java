@@ -9,10 +9,10 @@ public interface UserDao {
 
     /**
      * 用户登录
-     * @param username
+     * @param email
      * @return
      */
-    User getPasswordByUsername(String username);
+    User getPasswordByEmail(String email);
 
 
     /**
@@ -20,5 +20,12 @@ public interface UserDao {
      * @return
      */
     List<User> getAllUsers();
+
+    /**
+     * 添加用户
+     * @param user
+     * @return
+     */
+    boolean addUser(User user);
 
 }

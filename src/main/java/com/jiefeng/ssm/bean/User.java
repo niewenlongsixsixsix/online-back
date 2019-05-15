@@ -18,17 +18,21 @@ public class User {
   private Date lastLoginTime;
   private int status;
   private String salt;
-  private String createBy;
-  private String updateBy;
+  private User createBy;
+  private User updateBy;
   private Date updateTime;
   private String avatar;
   private int type;
   private int age;
   private int gender;
 
-  public User(String username, String password) {
-    this.username = username;
+  public User(String email, String password) {
+    this.username = email;
     this.password = password;
+  }
+
+  public User(int id) {
+    this.id = id;
   }
 
   public User() {

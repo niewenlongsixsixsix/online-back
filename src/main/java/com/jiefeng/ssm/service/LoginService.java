@@ -1,7 +1,7 @@
 package com.jiefeng.ssm.service;
 
 import com.jiefeng.ssm.bean.User;
-import com.jiefeng.ssm.dto.LoginDto;
+import com.jiefeng.ssm.dto.LoginExecution;
 
 public interface LoginService {
 
@@ -10,6 +10,6 @@ public interface LoginService {
      * @param user
      * @return
      */
-    LoginDto login(User user);
+    LoginExecution login(User user);
 
 }

@@ -1,7 +1,7 @@
 package com.jiefeng.ssm.service.impl;
 
 import com.jiefeng.ssm.bean.User;
-import com.jiefeng.ssm.dto.LoginDto;
+import com.jiefeng.ssm.dto.LoginExecution;
 import com.jiefeng.ssm.enums.LoginStateEnums;
 import com.jiefeng.ssm.service.LoginService;
 import org.apache.shiro.SecurityUtils;
@@ -22,7 +22,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     @Transactional
-    public LoginDto login(User user) {
+    public LoginExecution login(User user) {
 
         //先获取登录的主题
         Subject subject = SecurityUtils.getSubject();
@@ -40,9 +40,9 @@ public class LoginServiceImpl implements LoginService {
             token.setRememberMe(true);
             subject.login(token);
         } catch (UnknownAccountException e) {
-            return new LoginDto(LoginStateEnums.EMPTY);
+            return new LoginExecution(LoginStateEnums.EMPTY);
         }catch (IncorrectCredentialsException e){
-            return new LoginDto(LoginStateEnums.PASSWORD_ERROR);
+            return new LoginExecution(LoginStateEnums.PASSWORD_ERROR);
         }catch (AuthenticationException e){
             e.printStackTrace();
         }catch (Exception e){
@@ -53,10 +53,10 @@ public class LoginServiceImpl implements LoginService {
             logger.info(subject.getPrincipal().toString());
 
             //如果登录成功
-            return new LoginDto(LoginStateEnums.SUCCESS);
+            return new LoginExecution(LoginStateEnums.SUCCESS);
         }else{
             //如果没有
-            return new LoginDto(LoginStateEnums.SYSTEM_ERROR);
+            return new LoginExecution(LoginStateEnums.SYSTEM_ERROR);
         }
     }
 

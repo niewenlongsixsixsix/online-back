@@ -13,7 +13,7 @@
         </logger>
 
         <!-- 将业务dao接口填写进去,并用控制台输出即可 -->
-        <logger name="com.jiefeng.ssm.realm" level="info" additivity="false">
+        <logger name="com.jiefeng.ssm.shiro.realm" level="info" additivity="false">
             <appender-ref ref="consolePrint"/>
         </logger>
 

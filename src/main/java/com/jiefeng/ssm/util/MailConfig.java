@@ -1,8 +1,6 @@
 package com.jiefeng.ssm.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
@@ -29,12 +27,7 @@ public class MailConfig {
     private static void init() {
         properties = new Properties();
         try{
-            InputStream inputStream = MailConfig.class.getClassLoader().getResourceAsStream(PROPERTIES_DEFAULT);
-//          properties.load(inputStream);
-//          inputStream.close();
-            //解决中文乱码，采取reader把inputStream转换成reader用字符流来读取中文
-            BufferedReader bf = new BufferedReader(new InputStreamReader(inputStream));
-            properties.load(bf);
+            properties.load(new InputStreamReader(MailConfig.class.getClassLoader().getResourceAsStream(PROPERTIES_DEFAULT),"UTF-8"));
             host = properties.getProperty("mailHost");
             port = Integer.parseInt(properties.getProperty("mailPort"));
             userName = properties.getProperty("mailUsername");

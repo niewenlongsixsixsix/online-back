@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jiefeng.ssm.dao.RoleDao">
+
+    <!--查询用户拥有的角色-->
+    <select id="getUserAllRole" resultType="java.lang.String">
+        select tb_role.role_name from
+                (select role_id from tb_user_role where user_id = #{userId}) temp
+                      left join tb_role on temp.role_id = tb_role.id
+    </select>
+</mapper>

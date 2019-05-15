@@ -5,24 +5,24 @@ import com.jiefeng.ssm.enums.UserStateEnums;
 
 import java.util.List;
 
-public class UserDto {
+public class UserExecution {
     private int state;
     private String stateInfo;
     private User user;
     private List<User> userList;
 
-    public UserDto(UserStateEnums stateEnums) {
+    public UserExecution(UserStateEnums stateEnums) {
         this.state = stateEnums.getState();
         this.stateInfo = stateEnums.getStateInfo();
     }
 
-    public UserDto(UserStateEnums stateEnums,User user) {
+    public UserExecution(UserStateEnums stateEnums, User user) {
         this.state = stateEnums.getState();
         this.stateInfo = stateEnums.getStateInfo();
         this.user = user;
     }
 
-    public UserDto(UserStateEnums stateEnums,List<User> userList) {
+    public UserExecution(UserStateEnums stateEnums, List<User> userList) {
         this.state = stateEnums.getState();
         this.stateInfo = stateEnums.getStateInfo();
         this.userList = userList;
