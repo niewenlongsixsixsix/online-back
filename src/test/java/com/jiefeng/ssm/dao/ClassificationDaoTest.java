@@ -2,6 +2,7 @@ package com.jiefeng.ssm.dao;
 
 import com.jiefeng.ssm.BaseTest;
 import com.jiefeng.ssm.bean.Classification;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,6 +17,16 @@ public class ClassificationDaoTest extends BaseTest {
     public void testGetAllClassification(){
         List<Classification> allClassification = classificationDao.getAllClassification();
         System.out.println(allClassification);
+    }
+
+
+    @Test
+    public void addClassification(){
+        Classification classification = new Classification();
+        classification.setName("操作系统");
+        boolean b = classificationDao.addClassification(classification);
+
+        Assert.assertEquals(true,b);
     }
 
 }

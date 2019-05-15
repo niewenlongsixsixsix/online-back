@@ -9,6 +9,10 @@
         select * from tb_classification order by id desc
     </select>
 
+    <select id="getClassificationByPrimaryKey" resultType="classification">
+        select * from tb_classification where id = #{id}
+    </select>
+
 
     <insert id="addClassification" useGeneratedKeys="true" keyColumn="id">
         insert into tb_classification(name) values(#{name})

@@ -20,5 +20,12 @@ public interface ClassificationDao {
      */
     List<Classification> getAllClassification();
 
+    /**
+     * 根据ID获取分类
+     * @param id
+     * @return
+     */
+    Classification getClassificationByPrimaryKey(long id);
+
 
 }

@@ -28,4 +28,11 @@ public interface UserDao {
      */
     boolean addUser(User user);
 
+    /**
+     * 根据用户ID获取用户信息
+     * @param userId
+     * @return
+     */
+    User getUserByPrimaryKey(long userId);
+
 }

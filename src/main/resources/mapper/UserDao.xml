@@ -10,6 +10,10 @@
         select * from tb_user where email = #{email}
     </select>
 
+    <select id="getUserByPrimaryKey" resultType="user">
+        select * from tb_user where id = #{id}
+    </select>
+
     <!--获取所有用户信息-->
     <select id="getAllUsers" resultType="user">
         select * from tb_user order by id desc
@@ -20,6 +24,7 @@
         VALUES (#{username},#{password},#{phone},#{email},#{address},#{registerTime},#{lastLoginTime},#{status},#{salt},
                 #{createBy.id},#{updateBy.id},#{updateTime},#{avatar},#{type},#{age},#{gender})
     </insert>
+
 
 
 </mapper>

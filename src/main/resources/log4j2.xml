@@ -12,12 +12,7 @@
             <appender-ref ref="consolePrint"/>
         </logger>
 
-        <!-- 将业务dao接口填写进去,并用控制台输出即可 -->
-        <logger name="com.jiefeng.ssm.shiro.realm" level="info" additivity="false">
-            <appender-ref ref="consolePrint"/>
-        </logger>
-
-        <root level="info">
+        <root level="INFO">
             <appender-ref ref="consolePrint" />
         </root>
     </loggers>

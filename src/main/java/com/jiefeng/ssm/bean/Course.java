@@ -11,10 +11,10 @@ public class Course {
   private long id;
   private String title;
   private String subTitle;
-  private long createBy;
+  private User createBy;
   private Date createTime;
   private String imgUrl;
   private long priority;
-  private long belongTo;
+  private Classification belongTo;
 
 }
