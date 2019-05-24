@@ -29,4 +29,14 @@ public class ClassificationDaoTest extends BaseTest {
         Assert.assertEquals(true,b);
     }
 
+    @Test
+    public void updateClassification(){
+        Classification classification = new Classification();
+        classification.setId(12410);
+        classification.setStatus(0);
+
+        boolean b = classificationDao.updateClassification(classification);
+        System.out.println(b);
+    }
+
 }

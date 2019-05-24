@@ -8,8 +8,8 @@ public class MD5Test extends BaseTest {
 
     @Test
     public void testMD5(){
-        String password =  "123456";
-        String username = "admin";
+        String password =  "nie16226";
+        String username = "123456";
 
         //增加迭代次数，循环加密
         //cd757bae8bd31da92c6b14c235668091

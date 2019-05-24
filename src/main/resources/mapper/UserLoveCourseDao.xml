@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiefeng.ssm.dao.UserLoveCourseDao">
+
+
+    <insert id="addUserLoveCourse" parameterType="userLoveCourse">
+        insert into tb_user_love_course(user_id, course_id, create_time)
+              values (#{userId},#{courseId},#{createTime})
+    </insert>
+
+    <update id="deleteUserLoveCourse">
+        delete from tb_user_love_course where user_id = #{userId} and course_id = #{courseId}
+    </update>
+
+    <select id="getUserLoveCourse" resultType="userLoveCourse">
+        select * from tb_user_love_course where user_id = #{userId} and course_id = #{courseId}
+    </select>
+
+
+            <!--select * from tb_course where id in (select course_id from tb_user_love_course where user_id = 1540730)-->
+</mapper>

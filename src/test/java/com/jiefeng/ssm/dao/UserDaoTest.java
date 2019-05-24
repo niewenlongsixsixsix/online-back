@@ -21,6 +21,7 @@ public class UserDaoTest extends BaseTest {
         System.out.println(admin);
     }
 
+
     @Test
     public void testAddUser(){
         User user = new User();
@@ -36,7 +37,16 @@ public class UserDaoTest extends BaseTest {
 
     @Test
     public void testGetAllUser(){
-        List<User> allUsers = userDao.getAllUsers();
+        List<User> allUsers = userDao.getAllUsers(1);
         System.out.println(allUsers);
+    }
+
+    @Test
+    public void updateUserInfo(){
+        User user = new User();
+        user.setId(1540730);
+        user.setSalt("admin");
+        boolean b = userDao.updateUserInfo(user);
+        System.out.println(b);
     }
 }

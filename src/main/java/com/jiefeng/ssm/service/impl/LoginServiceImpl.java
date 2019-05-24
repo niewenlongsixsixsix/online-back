@@ -4,6 +4,7 @@ import com.jiefeng.ssm.bean.User;
 import com.jiefeng.ssm.dto.LoginExecution;
 import com.jiefeng.ssm.enums.LoginStateEnums;
 import com.jiefeng.ssm.service.LoginService;
+import com.jiefeng.ssm.shiro.realm.UserToken;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -22,7 +23,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     @Transactional
-    public LoginExecution login(User user) {
+    public LoginExecution login(Integer type,User user) {
 
         //先获取登录的主题
         Subject subject = SecurityUtils.getSubject();
@@ -34,10 +35,12 @@ public class LoginServiceImpl implements LoginService {
         String password = user.getPassword();
 
         //封装登录凭证
-        UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+        UserToken token = new UserToken(username,password,type);
+
+        //如果是普通用户则会选择记住我功能
+        token.setRememberMe(true);
 
         try {
-            token.setRememberMe(true);
             subject.login(token);
         } catch (UnknownAccountException e) {
             return new LoginExecution(LoginStateEnums.EMPTY);

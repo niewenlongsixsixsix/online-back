@@ -18,7 +18,8 @@ public class MyUserFilter extends UserFilter {
         httpServletResponse.setContentType("application/json");
         Map<String,Object> modelMap = new HashMap<>();
         modelMap.put("success",false);
-        modelMap.put("errMsgCode",-1);
+        modelMap.put("errMsgCode",-2);
+        modelMap.put("errMsg","登录凭证过期");
         System.out.println("-----------------------------------------");
         System.out.println("进来了user");
         httpServletResponse.getWriter().write(JSONObject.fromObject(modelMap).toString());

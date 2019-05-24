@@ -16,7 +16,7 @@
 
     <!--获取所有用户信息-->
     <select id="getAllUsers" resultType="user">
-        select * from tb_user order by id desc
+        select * from tb_user where type = #{type} order by id desc
     </select>
 
     <insert id="addUser" parameterType="user">
@@ -25,6 +25,24 @@
                 #{createBy.id},#{updateBy.id},#{updateTime},#{avatar},#{type},#{age},#{gender})
     </insert>
 
-
+    <!--修改用户信息-->
+    <update id="updateUserInfo" parameterType="user">
+        update tb_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="password != null and password !=''">
+                password = #{password},
+            </if>
+            <if test="salt != null and salt !=''">
+                salt = #{salt},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar}
+            </if>
+        </trim>
+          where id = #{id}
+    </update>
 
 </mapper>

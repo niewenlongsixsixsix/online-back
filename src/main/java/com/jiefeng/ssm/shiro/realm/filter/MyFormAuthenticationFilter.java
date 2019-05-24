@@ -20,6 +20,7 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
         Map<String,Object> modelMap = new HashMap<>();
         modelMap.put("success",false);
         modelMap.put("errMsgCode",-1);
+        modelMap.put("errMsg","没有权限");
         System.out.println("-----------------------------------------");
         System.out.println("进来了");
         httpServletResponse.getWriter().write(JSONObject.fromObject(modelMap).toString());

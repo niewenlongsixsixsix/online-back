@@ -25,7 +25,14 @@ public interface ClassificationDao {
      * @param id
      * @return
      */
-    Classification getClassificationByPrimaryKey(long id);
+    Classification getClassificationByPrimaryKey(Integer id);
+
+    /**
+     * 更新分类
+     * @param classification
+     * @return
+     */
+    boolean updateClassification(Classification classification);
 
 
 }

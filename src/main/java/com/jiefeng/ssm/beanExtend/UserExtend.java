@@ -1,25 +1,13 @@
 package com.jiefeng.ssm.beanExtend;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class UserExtend implements Serializable {
-    private int id;
+    private Integer id;
     private String username;
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    private Integer type;
+    private String avatar;
 }

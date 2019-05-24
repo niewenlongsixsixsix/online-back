@@ -6,7 +6,7 @@
 
     <!--获取所有的大分类-->
     <select id="getAllClassification" resultType="classification">
-        select * from tb_classification order by id desc
+        select * from tb_classification order by id
     </select>
 
     <select id="getClassificationByPrimaryKey" resultType="classification">
@@ -15,7 +15,22 @@
 
 
     <insert id="addClassification" useGeneratedKeys="true" keyColumn="id">
-        insert into tb_classification(name) values(#{name})
+        insert into tb_classification(name, create_time, status) values(#{name},#{createTime},#{status})
     </insert>
+
+
+    <update id="updateClassification" parameterType="classification">
+        update tb_classification
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name !=''">
+                name = #{name}
+            </if>
+            <if test="status != null ">
+                status = #{status}
+            </if>
+            where id = #{id}
+        </trim>
+
+    </update>
 
 </mapper>

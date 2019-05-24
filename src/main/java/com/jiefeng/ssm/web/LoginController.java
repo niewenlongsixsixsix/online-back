@@ -1,6 +1,10 @@
 package com.jiefeng.ssm.web;
 
+import com.jiefeng.ssm.annotation.ArchivesLog;
+import com.jiefeng.ssm.bean.Admin;
 import com.jiefeng.ssm.bean.User;
+import com.jiefeng.ssm.beanExtend.UserExtend;
+import com.jiefeng.ssm.beanExtend.UserOrAdminType;
 import com.jiefeng.ssm.dto.LoginExecution;
 import com.jiefeng.ssm.enums.LoginStateEnums;
 import com.jiefeng.ssm.redis.JedisUtil;
@@ -33,9 +37,9 @@ public class LoginController {
      * @param map
      * @return
      */
-    @RequestMapping(value = "/AccountAuth",method = RequestMethod.POST)
+    @RequestMapping(value = "/AccountAuth/{type}",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> AccountAuth(@RequestBody Map map){
+    public Map<String,Object> AccountAuth(@PathVariable Integer type,@RequestBody Map map) throws Exception {
 
         Map<String,Object> modelMap = new HashMap<>();
 
@@ -44,16 +48,24 @@ public class LoginController {
 
         logger.info("用户名: " +username + "密码: " + password);
 
-        LoginExecution loginDto = loginService.login(new User(username, password));
+        LoginExecution loginDto = loginService.login(type,new User(username, password));
 
         if(loginDto.getState() == LoginStateEnums.SUCCESS.getState()){
+            UserOrAdminType subject = (UserOrAdminType) SecurityUtils.getSubject().getPrincipal();
+            if(subject.getType() == 0){
+                UserExtend object = (UserExtend) subject.getObject();
+                modelMap.put("type",object.getType());
+                modelMap.put("userId",object.getId());
+                modelMap.put("avatar",object.getAvatar());
+            }else{
+                Admin admin = (Admin) subject.getObject();
+                modelMap.put("userId",admin.getId());
+            }
             modelMap.put("success",true);
-            modelMap.put("describe","登录系统");
         }else{
             modelMap.put("success",false);
             modelMap.put("errMsg",loginDto.getStateInfo());
         }
-
         return modelMap;
     }
 

@@ -12,8 +12,16 @@ public interface CourseService {
      */
     List<Course> getAllCourseListByUserId();
 
+    Course getCourseByPrimaryKey(Integer courseId);
 
-    List<Course> getAllCourseListByUserId(long userId);
+    List<Course> getAllCourseByClassification(int classificationId);
 
+    boolean addCourse(Course course);
+
+    boolean updateCourse(Course course);
+
+    List<Course> getAllCourse();
+
+    List<Course> getAllCourseByLoveCourseId(Integer userId);
 
 }

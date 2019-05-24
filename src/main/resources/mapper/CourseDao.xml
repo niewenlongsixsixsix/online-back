@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiefeng.ssm.dao.CourseDao">
 
-
     <resultMap id="myCourseMap" type="course">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
@@ -20,4 +19,56 @@
         select * from tb_course where create_by = #{userId}
     </select>
 
+    <select id="getAllCourseByClassification" resultMap="myCourseMap">
+        select * from tb_course where belong_to = #{classificationId}
+    </select>
+
+    <select id="getAllCourse" resultMap="myCourseMap">
+        select * from tb_course
+    </select>
+
+    <select id="getCourseByPrimaryKey" resultMap="myCourseMap">
+        select * from tb_course where id = #{id}
+    </select>
+
+    <insert id="addCourse" parameterType="course" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_course(title, sub_title, create_by, create_time, img_url, priority, belong_to)
+              values(#{title},#{subTitle},#{createBy.id},#{createTime},#{imgUrl},#{priority},#{belongTo.id})
+    </insert>
+
+    <update id="updateCourse" parameterType="course">
+        update tb_course
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="subTitle != null">
+                sub_title = #{subTitle},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy.id},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="imgUrl != null">
+                img_url = #{imgUrl},
+            </if>
+            <if test="priority != null">
+                priority = #{priority},
+            </if>
+            <if test="belongTo != null">
+                belong_to = #{belongTo.id},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <select id="getAllCourseByLoveCourseId" resultMap="myCourseMap">
+        select * from tb_course where id in (select course_id from tb_user_love_course where user_id = #{userId})
+    </select>
 </mapper>

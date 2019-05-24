@@ -1,6 +1,9 @@
 package com.jiefeng.ssm.service.impl;
 
+import com.jiefeng.ssm.bean.Admin;
 import com.jiefeng.ssm.bean.User;
+import com.jiefeng.ssm.dao.AdminDao;
+import com.jiefeng.ssm.dao.RoleDao;
 import com.jiefeng.ssm.dao.UserDao;
 import com.jiefeng.ssm.dto.RegisterExecution;
 import com.jiefeng.ssm.enums.RegisterStateEnums;
@@ -27,6 +30,10 @@ public class RegisterServiceImpl implements RegisterService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private AdminDao adminDao;
+
+
     @Override
     @Transactional
     public RegisterExecution addUser(User user) {
@@ -46,6 +53,24 @@ public class RegisterServiceImpl implements RegisterService {
             return new RegisterExecution(RegisterStateEnums.SYSTEM_ERROR);
         }
 
+        return new RegisterExecution(RegisterStateEnums.SUCCESS);
+    }
+
+    @Override
+    @Transactional
+    public RegisterExecution addAdmin(Admin admin) {
+        boolean b;
+        try{
+            b = adminDao.addAdmin(admin);
+        }catch (Exception e){
+            e.printStackTrace();
+            //产生异常，事务回滚
+            throw new RegisterOperationException("addAdmin 系统异常");
+        }
+
+        if(!b){
+            return new RegisterExecution(RegisterStateEnums.SYSTEM_ERROR);
+        }
         return new RegisterExecution(RegisterStateEnums.SUCCESS);
     }
 
@@ -109,10 +134,6 @@ public class RegisterServiceImpl implements RegisterService {
 
         return new RegisterExecution(RegisterStateEnums.SUCCESS);
     }
-
-
-
-
 
 
     /**

@@ -11,4 +11,57 @@
                 (select role_id from tb_user_role where user_id = #{userId}) temp
                       left join tb_role on temp.role_id = tb_role.id
     </select>
+
+    <select id="getRoleByPrimaryKey" resultType="role">
+        select * from tb_role where id = #{roleId}
+    </select>
+
+    <select id="getAllRole" resultType="role">
+        select * from tb_role
+    </select>
+
+    <delete id="deleteAllPermissionByRoleId">
+        delete from tb_role_permission where role_id = #{roleId}
+    </delete>
+
+    <insert id="batchAddPermissionForRole" parameterType="java.lang.Integer">
+        insert into tb_role_permission(role_id, permission_id) value
+        <foreach collection="permissionList" item="item" separator=",">
+            (#{roleId},#{item})
+        </foreach>
+    </insert>
+
+    <!--添加角色-->
+    <insert id="addRole" parameterType="role">
+        insert into tb_role(role_name, role_desc, create_time, function_desc) values
+            (#{roleName},#{roleDesc},#{createTime},#{functionDesc})
+    </insert>
+
+    <update id="updateRole" parameterType="role">
+        update tb_role
+        <trim prefix="set" suffixOverrides=",">
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="roleDesc != null and roleDesc != ''">
+                role_desc = #{roleDesc},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="functionDesc != null and functionDesc != ''">
+                function_desc = #{functionDesc},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <insert id="addRoleForUserOrAdmin">
+        insert into tb_user_role(user_id, role_id) values(#{userId},#{roleId})
+    </insert>
+
+    <update id="updateRoleForUserOrAdmin">
+        update tb_user_role set role_id = #{roleId} where user_id = #{userId}
+    </update>
+
 </mapper>

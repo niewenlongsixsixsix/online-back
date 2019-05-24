@@ -13,6 +13,7 @@
 
         <!--Log4j2-->
         <setting name="logImpl" value="LOG4J2" />
+
     </settings>
 
     <!--开启别名-->

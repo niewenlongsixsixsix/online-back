@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiefeng.ssm.dao.NoteDao">
+
+    <resultMap id="myNoteMap" type="note">
+        <id property="id" column="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="create_time" property="createTime"/>
+        <result column="priority" property="priority"/>
+        <result column="high_quality" property="highQuality"/>
+        <result column="public_visible" property="publicVisible"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="img_url" property="imgUrl"/>
+        <association property="createBy" select="com.jiefeng.ssm.dao.UserDao.getUserByPrimaryKey" column="create_by">
+
+        </association>
+    </resultMap>
+
+    <select id="getNoteByPrimaryKey" resultMap="myNoteMap">
+        select * from tb_note where id = #{noteId}
+    </select>
+
+    <select id="getAllNoteByUserId" resultMap="myNoteMap">
+        select * from tb_note where create_by = #{userId}
+    </select>
+
+    <insert id="addNote" parameterType="note">
+        insert into tb_note(title, content, create_by, create_time, priority, high_quality, public_visible, update_time,img_url)
+                value(#{title},#{content},#{createBy.id},#{createTime},#{priority},#{highQuality},#{publicVisible},#{updateTime},#{imgUrl})
+
+    </insert>
+
+    <update id="updateNote" parameterType="note">
+        update tb_note
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null and title !=''">
+                title = #{title},
+            </if>
+            <if test="content != null and content !=''">
+                content = #{content},
+            </if>
+            <if test="priority != null and priority !=''">
+                priority = #{priority},
+            </if>
+            <if test="highQuality != null">
+                high_quality = #{highQuality},
+            </if>
+            <if test="publicVisible != null">
+                public_visible = #{publicVisible},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="imgUrl != null">
+                img_url = #{imgUrl},
+            </if>
+        </trim>
+          where id = #{id}
+    </update>
+</mapper>

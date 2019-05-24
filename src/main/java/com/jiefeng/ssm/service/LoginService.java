@@ -7,9 +7,10 @@ public interface LoginService {
 
     /**
      * 进行登录验证
+     * @param type
      * @param user
      * @return
      */
-    LoginExecution login(User user);
+    LoginExecution login(Integer type,User user);
 
 }

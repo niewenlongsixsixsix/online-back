@@ -1,41 +1,167 @@
 package com.jiefeng.ssm.web.common;
 
+import com.jiefeng.ssm.annotation.LoggerOrException;
+import com.jiefeng.ssm.bean.Classification;
 import com.jiefeng.ssm.bean.Course;
+import com.jiefeng.ssm.bean.User;
+import com.jiefeng.ssm.beanExtend.UserExtend;
+import com.jiefeng.ssm.dao.CourseDao;
 import com.jiefeng.ssm.service.CourseService;
+import com.jiefeng.ssm.util.ImageUtil;
+import com.jiefeng.ssm.util.PathUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/course")
 @Controller
 public class CourseController {
 
+    Logger logger = LoggerFactory.getLogger(CourseController.class);
+
     @Autowired
     private CourseService courseService;
 
-    /**
-     *
-     * @param type
-     * @param id
-     * @return
-     */
-    @RequestMapping(value = "/getAllCourseByUserId/{type}/{id}",method = RequestMethod.GET)
-    @ResponseBody
-    public List<Course> getAllCourseByUserId(@PathVariable int type, @PathVariable long id){
+    @Autowired
+    private CourseDao courseDao;
 
+    @RequestMapping(value = {"/getAllCourseByUserId"},method = RequestMethod.GET)
+    @ResponseBody
+    public List<Course> getAllCourseByUserId() throws Exception {
+
+        System.out.println("jinlaile");
         List<Course> allCourseListByUserId;
+
         // 0 普通用户 1 管理员查询
-        if(type == 0){
-            allCourseListByUserId = courseService.getAllCourseListByUserId();
-        }else{
-            allCourseListByUserId = courseService.getAllCourseListByUserId(id);
-        }
+        allCourseListByUserId = courseService.getAllCourseListByUserId();
 
         return allCourseListByUserId;
     }
+
+
+    @RequestMapping(value = {"/updateImgUrl/{courseId}"},method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> updateImgUrl(HttpServletRequest request,@PathVariable Integer courseId) throws Exception {
+
+        Map<String,Object> modelMap = new HashMap<>();
+
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        List<MultipartFile> files = multipartRequest.getFiles("courseImg");
+
+        if(files == null){
+            throw new Exception("文件上传为空");
+        }
+
+        Course courseByPrimaryKey = courseDao.getCourseByPrimaryKey(courseId);
+
+        Course course = new Course();
+
+        boolean result = false;
+        try{
+            String path = PathUtil.generateCourseImg(courseByPrimaryKey.getCreateBy().getId(),courseId);
+            String imgPath = ImageUtil.generateNormalImg(files.get(0), path);
+            course.setImgUrl(imgPath);
+            course.setId(courseId);
+
+            result = courseService.updateCourse(course);
+        }catch (IOException e){
+           throw e;
+        }
+
+        modelMap.put("success",true);
+        return modelMap;
+
+    }
+
+
+    /**
+     *
+     * @param
+     * @param addOrEdit true 添加  false修改
+     * @param courseId 要修改的用户的ID
+     */
+    @RequestMapping(value = {"/addCourse/{addOrEdit}","/addCourse/{addOrEdit}/{id}","/updateCourse/{addOrEdit}/{courseId}"},method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> addOrUpdateCourse(@PathVariable Integer addOrEdit,
+                                  @PathVariable(required = false) Integer id,
+                                  @PathVariable(required = false) Integer courseId,
+                                  @RequestBody Map map) throws Exception {
+
+        Map<String,Object> modelMap = new HashMap<>();
+
+        String title = (String) map.get("title");
+        Integer classificationId = (Integer) map.get("classification");
+
+        if(title == null || classificationId == null){
+            throw new Exception("参数为空");
+        }
+
+        logger.info("title: " + title + " classificationId: " + classificationId);
+        logger.info(map.toString());
+
+        Course course = new Course();
+        course.setTitle(title);
+        course.setBelongTo(new Classification(classificationId));
+
+        if(addOrEdit == null || addOrEdit != 1 || addOrEdit != 0){
+            throw new Exception("参数错误");
+        }
+
+        //判断添加还是更新
+        if(addOrEdit == 1){
+            //0 普通用户  1 管理员查询
+            if(id == null){
+                Subject subject = SecurityUtils.getSubject();
+                UserExtend principal = (UserExtend) subject.getPrincipal();
+                course.setCreateBy(new User(principal.getId()));
+                courseService.addCourse(course);
+            }else{
+                course.setCreateBy(new User(id));
+                courseService.addCourse(course);
+            }
+        }else{
+            course.setId(courseId);
+            courseService.updateCourse(course);
+        }
+        modelMap.put("success",true);
+        return modelMap;
+    }
+
+
+    @RequestMapping(value = "/getCourseByClassification/{classificationId}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Course> getClassificationByCategory(@PathVariable Integer classificationId) throws Exception {
+
+        if(classificationId == null){
+            throw new Exception("参数为空");
+        }
+
+        if(classificationId == 12410){
+            return courseService.getAllCourse();
+        }else{
+            return courseService.getAllCourseByClassification(classificationId);
+        }
+    }
+
+    @RequestMapping(value = "/getAllCourse",method = RequestMethod.GET)
+    @ResponseBody
+    @LoggerOrException(operationName = "查询全部课程")
+    public List<Course> getAllCourse(){
+        return courseService.getAllCourse();
+    }
+
+
+
 }

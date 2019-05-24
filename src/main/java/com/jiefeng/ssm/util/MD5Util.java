@@ -12,6 +12,12 @@ public class MD5Util {
      */
     public static String Md5Encryption(String encryptionTarget, String salt){
 
+        if(encryptionTarget == null){
+            System.out.println("en null");
+        }
+        if(salt == null){
+            System.out.println("salt null");
+        }
         Md5Hash md5Hash = new Md5Hash(encryptionTarget,salt,1);
         return md5Hash.toString();
 

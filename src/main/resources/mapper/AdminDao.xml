@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiefeng.ssm.dao.AdminDao">
+
+    <resultMap id="myAdminDaoMap" type="admin">
+        <id column="id" property="id"/>
+        <result column="auth_account" property="authAccount"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="type" property="type"/>
+        <result column="create_by" property="createBy"/>
+        <result column="name" property="name"/>
+        <result column="create_time" property="createTime"/>
+        <result column="status" property="status"/>
+        <association property="role" select="com.jiefeng.ssm.dao.RoleDao.getRoleByPrimaryKey" column="role"/>
+    </resultMap>
+
+    <select id="getAllAdmin" resultMap="myAdminDaoMap">
+        select * from tb_admin
+    </select>
+
+
+    <select id="getAdminByUsername" resultMap="myAdminDaoMap">
+        select * from tb_admin where auth_account = #{username}
+    </select>
+
+    <select id="getAdminByPrimaryKey" resultMap="myAdminDaoMap">
+        select * from tb_admin where id = #{id}
+    </select>
+
+    <insert id="addAdmin" parameterType="admin" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_admin(auth_account, password, salt, type, create_by, name, create_time, status,role)
+            values(#{authAccount},#{password},#{salt},#{type},#{createBy},#{name},#{createTime},#{status},#{role.id})
+    </insert>
+
+    <update id="updateAdmin" parameterType="admin">
+        update tb_admin
+        <trim prefix="set" suffixOverrides=",">
+            <if test="authAccount != null and authAccount != ''">
+                auth_account = #{authAccount},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="salt != null and salt != ''">
+                salt = #{salt},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="role != null">
+                role = #{role.id}
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+</mapper>

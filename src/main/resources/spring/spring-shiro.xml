@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -49,8 +50,8 @@
     <!-- 即用户登录后就是一次会话，在没有退出之前，它的所有信息都在会话中；会话可以是普通 JavaSE 环境的，也可以是如 Web 环境的 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <property name="sessionIdCookie" ref="simpleCookie"/>
-        <!-- 全局的会话信息时间,,单位为毫秒  -->
-        <property name="globalSessionTimeout" value="180000"/>
+        <!-- 全局的会话信息时间 2小时,,单位为毫秒  -->
+        <property name="globalSessionTimeout" value="7200000"/>
         <!-- 检测扫描信息时间间隔,单位为毫秒-->
         <property name="sessionValidationInterval" value="60000"/>
         <!-- 是否开启扫描 -->
@@ -76,8 +77,8 @@
     <bean class="org.apache.shiro.web.servlet.SimpleCookie" id="rememberMeCookie">
         <constructor-arg value="rememberMe"/>
         <property name="httpOnly" value="false"/>
-        <!--记住我的cookie，保存时常30天-->
-        <property name="maxAge" value="2592000"/>
+        <!--记住我的cookie，保存时常1天-->
+        <property name="maxAge" value="86400"/>
         <property name="name" value="rememberMe"/>
         <property name="path" value="/"/>
     </bean>
@@ -89,5 +90,11 @@
 
     <bean class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter" id="formAuthenticationFilter">
         <property name="rememberMeParam" value="rememberMe"/>
+    </bean>
+
+    <aop:config proxy-target-class="true"></aop:config>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor" id="attributeSourceAdvisor">
+
     </bean>
 </beans>

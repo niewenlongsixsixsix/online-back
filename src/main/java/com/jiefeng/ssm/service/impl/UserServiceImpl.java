@@ -21,20 +21,35 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public UserExecution getAllUser() {
+    public UserExecution getAllUser(Integer type) {
 
         //初始化
         List<User> allUsers = null;
 
         //判断是否能够正常取到用户数据
         try{
-             allUsers = userDao.getAllUsers();
+             allUsers = userDao.getAllUsers(type);
         }catch (Exception e){
             e.printStackTrace();
             return new UserExecution(UserStateEnums.SYSTEM_ERROR);
         }
         //正常取到，返回
         return new UserExecution(UserStateEnums.SUCCESS,allUsers);
+    }
+
+    @Override
+    public User getUserByPrimaryKey(Integer userId) {
+        return userDao.getUserByPrimaryKey(userId);
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    @Override
+    public boolean updateUserInfo(User user) {
+        return userDao.updateUserInfo(user);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.jiefeng.ssm.service;
 
+import com.jiefeng.ssm.bean.Admin;
 import com.jiefeng.ssm.bean.User;
 import com.jiefeng.ssm.dto.RegisterExecution;
 
@@ -26,5 +27,9 @@ public interface RegisterService {
      * @return
      */
     RegisterExecution addUser( User user);
+
+
+    RegisterExecution addAdmin(Admin admin);
+
 
 }

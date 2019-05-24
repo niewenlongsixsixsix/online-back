@@ -1,6 +1,7 @@
 package com.jiefeng.ssm.dao;
 
 import com.jiefeng.ssm.bean.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface UserDao {
      * 获取所有的用户信息
      * @return
      */
-    List<User> getAllUsers();
+    List<User> getAllUsers(Integer type);
 
     /**
      * 添加用户
@@ -33,6 +34,14 @@ public interface UserDao {
      * @param userId
      * @return
      */
-    User getUserByPrimaryKey(long userId);
+    User getUserByPrimaryKey(Integer userId);
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    boolean updateUserInfo(User user);
+
 
 }

@@ -12,4 +12,19 @@
                               left join tb_permission on temp.permission_id = tb_permission.id
     </select>
 
+    <!--获取每组权限分类的具体权限-->
+    <select id="getPerPermissionCategoryPermission" resultType="permission">
+        select * from tb_permission where id in
+                    (select permission_id from tb_permission_category_relation where permission_category_id = #{permissionCategoryId})
+    </select>
+
+    <!--根据角色获取其权限ID-->
+    <select id="getPermissionByRoleId" resultType="java.lang.Integer">
+        select permission_id from tb_role_permission where role_id = #{roleId}
+    </select>
+
+    <select id="getPermissionByAdminId" resultType="java.lang.Integer">
+        select permission_id from tb_role_permission where role_id in (select role_id from tb_user_role where user_id = #{adminId})
+    </select>
+
 </mapper>

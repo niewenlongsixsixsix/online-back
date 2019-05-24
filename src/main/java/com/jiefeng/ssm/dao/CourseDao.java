@@ -11,6 +11,30 @@ public interface CourseDao {
      * @param UserId
      * @return
      */
-    List<Course>  getAllCourseByUserId(long UserId);
+    List<Course>  getAllCourseByUserId(Integer UserId);
+
+    List<Course> getAllCourse();
+
+    List<Course> getAllCourseByClassification(int classification);
+
+    Course getCourseByPrimaryKey(Integer id);
+    /**
+     * 添加课程
+     * @param course
+     * @return
+     */
+    boolean addCourse(Course course);
+
+
+    boolean updateCourse(Course course);
+
+    /**
+     * 删除课程
+     * @param courseId
+     * @return
+     */
+    boolean delete(Integer courseId);
+
+    List<Course> getAllCourseByLoveCourseId(Integer userId);
 
 }

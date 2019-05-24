@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiefeng.ssm.dao.ExceptionDao">
+
+    <insert id="addException" parameterType="exception">
+        insert into tb_exception(username, ip, exception_desc, method, create_time, exception_detail,method_args)
+                    values(#{username},#{ip},#{exceptionDesc},#{method},#{createTime},#{exceptionDetail},#{methodArgs})
+    </insert>
+
+    <select id="getAllException" resultType="exception">
+        select * from tb_exception order by id desc
+    </select>
+
+</mapper>

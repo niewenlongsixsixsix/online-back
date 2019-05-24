@@ -1,5 +1,6 @@
 package com.jiefeng.ssm.web;
 
+import com.jiefeng.ssm.bean.Admin;
 import com.jiefeng.ssm.bean.User;
 import com.jiefeng.ssm.dto.RegisterExecution;
 import com.jiefeng.ssm.enums.RegisterStateEnums;
@@ -140,6 +141,51 @@ public class RegisterController {
             e.printStackTrace();
         }
         return modelMap;
+    }
 
+
+
+    /**
+     * 添加用户到数据库
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "addAdmin",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> addAdmin(@RequestBody Map map){
+        Map<String,Object> modelMap = new HashMap<>();
+
+        //先打印从前端发送过来的用户数据
+        logger.info("map: " + map.toString());
+        //获取其中register的用户数据
+        Object register = map.get("adminRegister");
+        try{
+            //先将JSON字符串转化为JSON对象
+            JSONObject object = JSONObject.fromObject(register);
+            //将JSON对象转化为对应的bean
+            Admin bean = (Admin) JSONObject.toBean(object, Admin.class);
+            logger.info("toBean User: " + bean);
+            //生成密码的盐
+            String salt = SaltUtil.generateSalt();
+            logger.info("salt: " + salt);
+            //生成加盐密码并将其设置到bean中
+            bean.setPassword(MD5Util.Md5Encryption(bean.getPassword(),salt));
+            //将salt添加到bean中
+            bean.setSalt(salt);
+            //注册时间
+            bean.setCreateTime(new Date());
+            //添加用户
+            RegisterExecution execution = registerService.addAdmin(bean);
+
+            if(execution.getState() == RegisterStateEnums.SUCCESS.getState()){
+                modelMap.put("success",true);
+            }else{
+                modelMap.put("success",false);
+                modelMap.put("errMsg",execution.getStateInfo());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return modelMap;
     }
 }

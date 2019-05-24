@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiefeng.ssm.dao.BigChapterDao">
+
+    <resultMap id="mBigResultMap" type="bigChapter">
+        <id column="id" property="id"/>
+        <result property="title" column="title"/>
+        <result property="chapterDescribe" column="chapter_describe"/>
+        <result property="createTime" column="create_time"/>
+        <association property="courseId" select="com.jiefeng.ssm.dao.CourseDao.getCourseByPrimaryKey" column="course_id"/>
+    </resultMap>
+
+
+    <insert id="addBigChapter" parameterType="bigChapter">
+        insert into tb_big_chapter(title, chapter_describe, course_id, create_time) 
+            values(#{title},#{chapterDescribe},#{courseId.id},#{createTime})
+    </insert>
+
+    
+    <select id="getAllBigChapterByCourseId" resultMap="mBigResultMap">
+        select * from tb_big_chapter where course_id = #{courseId}
+    </select>
+
+    <update id="updateBigChapter" parameterType="bigChapter">
+        update tb_big_chapter
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="chapterDescribe">
+                chapter_describe = #{chapterDescribe},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <select id="getBigChapterByPrimaryKey" resultMap="mBigResultMap">
+        select * from tb_big_chapter where id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiefeng.ssm.dao.LoggerDao">
+
+    <insert id="addLogger" parameterType="logger">
+        insert into tb_logger(username, ip, method, spend_time, create_time,logger_desc,method_args)
+                    values (#{username},#{ip},#{method},#{spendTime},#{createTime},#{loggerDesc},#{methodArgs})
+    </insert>
+
+
+    <select id="getAllLogger" resultType="logger">
+        select  * from tb_logger order by id desc
+    </select>
+
+</mapper>

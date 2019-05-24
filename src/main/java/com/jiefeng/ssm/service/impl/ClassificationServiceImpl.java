@@ -14,11 +14,35 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Autowired
     private ClassificationDao classificationDao;
 
+    /**
+     * 获取所有的分类
+     * @return
+     */
     @Override
     public List<Classification> getAllClassification() {
 
         List<Classification> allClassification = classificationDao.getAllClassification();
 
         return allClassification;
+    }
+
+    /**
+     * 添加分类
+     * @param classification
+     * @return
+     */
+    @Override
+    public boolean addClassification(Classification classification) {
+        return classificationDao.addClassification(classification);
+    }
+
+    @Override
+    public boolean updateClassification(Classification classification) {
+        return classificationDao.updateClassification(classification);
+    }
+
+    @Override
+    public Classification getClassificationByPrimaryKey(Integer id) {
+        return classificationDao.getClassificationByPrimaryKey(id);
     }
 }
