@@ -24,4 +24,6 @@ public interface CourseService {
 
     List<Course> getAllCourseByLoveCourseId(Integer userId);
 
+    List<Course> hotOrNewCourse(Integer type);
+
 }

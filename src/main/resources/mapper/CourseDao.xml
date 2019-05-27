@@ -18,13 +18,25 @@
     <select id="getAllCourseByUserId" resultMap="myCourseMap">
         select * from tb_course where create_by = #{userId}
     </select>
-
+    <select id="hotOrNewCourse" resultMap="myCourseMap">
+        #             0 最新课程 1 最热课程
+        select * from tb_course order by id
+        <choose>
+            <when test="_parameter == 0">
+                desc
+            </when>
+            <when test="_parameter == 1">
+                asc
+            </when>
+        </choose>
+        limit 4
+    </select>
     <select id="getAllCourseByClassification" resultMap="myCourseMap">
         select * from tb_course where belong_to = #{classificationId}
     </select>
 
     <select id="getAllCourse" resultMap="myCourseMap">
-        select * from tb_course
+        select * from tb_course order by id desc
     </select>
 
     <select id="getCourseByPrimaryKey" resultMap="myCourseMap">

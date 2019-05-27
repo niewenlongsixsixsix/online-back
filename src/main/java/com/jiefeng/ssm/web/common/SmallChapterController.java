@@ -87,12 +87,16 @@ public class SmallChapterController {
             String imgPath = ImageUtil.generateNormalImg(files.get(0), path);
             chapter.setVideoUrl(imgPath);
 
-            smallChapterService.updateSmallChapter(chapter);
+            boolean b = smallChapterService.updateSmallChapter(chapter);
+
+            if(b)
+                modelMap.put("success",true);
+
         }catch (Exception e){
             throw e;
         }
 
-        modelMap.put("success",true);
+        modelMap.put("success",false);
 
         return modelMap;
     }

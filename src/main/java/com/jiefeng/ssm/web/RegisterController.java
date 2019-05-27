@@ -128,6 +128,8 @@ public class RegisterController {
             //注册时间
             bean.setRegisterTime(new Date());
 
+            //激活账号
+            bean.setStatus(1);
             //添加用户
             RegisterExecution execution = registerService.addUser(bean);
 

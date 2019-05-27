@@ -48,6 +48,7 @@ public class LoginController {
 
         logger.info("用户名: " +username + "密码: " + password);
 
+        logger.info("type: " + type);
         LoginExecution loginDto = loginService.login(type,new User(username, password));
 
         if(loginDto.getState() == LoginStateEnums.SUCCESS.getState()){

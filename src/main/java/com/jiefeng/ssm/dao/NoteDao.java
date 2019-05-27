@@ -13,4 +13,8 @@ public interface NoteDao {
     List<Note> getAllNoteByUserId(Integer userId);
 
     boolean updateNote(Note note);
+
+    List<Note> getAllNote();
+
+    List<Note> getHotNote();
 }

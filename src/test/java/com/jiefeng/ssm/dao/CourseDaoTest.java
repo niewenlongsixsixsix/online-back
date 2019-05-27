@@ -48,4 +48,13 @@ public class CourseDaoTest extends BaseTest {
         Course courseByPrimaryKey = courseDao.getCourseByPrimaryKey(2);
         System.out.println(courseByPrimaryKey);
     }
+
+    /**
+     *
+     */
+    @Test
+    public void testHotCourse(){
+        List<Course> courses = courseDao.hotOrNewCourse(1);
+        System.out.println(courses);
+    }
 }

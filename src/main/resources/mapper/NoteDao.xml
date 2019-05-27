@@ -23,8 +23,16 @@
         select * from tb_note where id = #{noteId}
     </select>
 
+    <select id="getAllNote" resultMap="myNoteMap">
+        select * from tb_note order by id desc
+    </select>
+
     <select id="getAllNoteByUserId" resultMap="myNoteMap">
         select * from tb_note where create_by = #{userId}
+    </select>
+
+    <select id="getHotNote" resultMap="myNoteMap">
+        select * from tb_note order by id desc limit 3
     </select>
 
     <insert id="addNote" parameterType="note">

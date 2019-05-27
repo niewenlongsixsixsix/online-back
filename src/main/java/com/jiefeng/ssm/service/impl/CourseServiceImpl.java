@@ -89,5 +89,10 @@ public class CourseServiceImpl implements CourseService {
         return courseDao.getAllCourseByLoveCourseId(userId);
     }
 
+    @Override
+    public List<Course> hotOrNewCourse(Integer type) {
+        return courseDao.hotOrNewCourse(type);
+    }
+
 
 }

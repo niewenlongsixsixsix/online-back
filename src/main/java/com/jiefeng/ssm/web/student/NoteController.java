@@ -55,6 +55,11 @@ public class NoteController {
         return modelMap;
     }
 
+    @RequestMapping(value = "getAllNote",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Note> getAllNote(){
+        return noteService.getAllNote();
+    }
 
     @RequestMapping(value = "updateNote",method = RequestMethod.POST)
     @ResponseBody
@@ -107,5 +112,10 @@ public class NoteController {
         return modelMap;
     }
 
+    @RequestMapping(value = "getHotNote",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Note> getHotNote(){
+        return noteService.getHotNote();
+    }
 
 }

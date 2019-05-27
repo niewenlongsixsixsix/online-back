@@ -5,6 +5,7 @@ import com.jiefeng.ssm.bean.Classification;
 import com.jiefeng.ssm.bean.Course;
 import com.jiefeng.ssm.bean.User;
 import com.jiefeng.ssm.beanExtend.UserExtend;
+import com.jiefeng.ssm.beanExtend.UserOrAdminType;
 import com.jiefeng.ssm.dao.CourseDao;
 import com.jiefeng.ssm.service.CourseService;
 import com.jiefeng.ssm.util.ImageUtil;
@@ -92,15 +93,16 @@ public class CourseController {
      * @param addOrEdit true 添加  false修改
      * @param courseId 要修改的用户的ID
      */
-    @RequestMapping(value = {"/addCourse/{addOrEdit}","/addCourse/{addOrEdit}/{id}","/updateCourse/{addOrEdit}/{courseId}"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/addCourse/{addOrEdit}","/updateCourse/{addOrEdit}/{courseId}"},method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> addOrUpdateCourse(@PathVariable Integer addOrEdit,
-                                  @PathVariable(required = false) Integer id,
                                   @PathVariable(required = false) Integer courseId,
                                   @RequestBody Map map) throws Exception {
 
         Map<String,Object> modelMap = new HashMap<>();
 
+
+        System.out.println("addOredit: " + addOrEdit);
         String title = (String) map.get("title");
         Integer classificationId = (Integer) map.get("classification");
 
@@ -115,22 +117,13 @@ public class CourseController {
         course.setTitle(title);
         course.setBelongTo(new Classification(classificationId));
 
-        if(addOrEdit == null || addOrEdit != 1 || addOrEdit != 0){
-            throw new Exception("参数错误");
-        }
-
         //判断添加还是更新
         if(addOrEdit == 1){
-            //0 普通用户  1 管理员查询
-            if(id == null){
                 Subject subject = SecurityUtils.getSubject();
-                UserExtend principal = (UserExtend) subject.getPrincipal();
-                course.setCreateBy(new User(principal.getId()));
+                UserOrAdminType principal = (UserOrAdminType) subject.getPrincipal();
+            UserExtend object = (UserExtend) principal.getObject();
+            course.setCreateBy(new User(object.getId()));
                 courseService.addCourse(course);
-            }else{
-                course.setCreateBy(new User(id));
-                courseService.addCourse(course);
-            }
         }else{
             course.setId(courseId);
             courseService.updateCourse(course);
@@ -163,5 +156,10 @@ public class CourseController {
     }
 
 
+    @RequestMapping(value = "getHotOrNew/{type}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Course> getHotOrNew(@PathVariable Integer type){
+        return courseService.hotOrNewCourse(type);
+    }
 
 }

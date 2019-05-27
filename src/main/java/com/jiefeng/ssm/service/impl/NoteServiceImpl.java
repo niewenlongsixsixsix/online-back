@@ -19,6 +19,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public boolean addNote(Note note) {
+        System.out.println(note);
         return noteDao.addNote(note);
     }
 
@@ -40,5 +41,15 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public boolean updateNote(Note note) {
         return noteDao.updateNote(note);
+    }
+
+    @Override
+    public List<Note> getAllNote() {
+        return noteDao.getAllNote();
+    }
+
+    @Override
+    public List<Note> getHotNote() {
+        return noteDao.getHotNote();
     }
 }

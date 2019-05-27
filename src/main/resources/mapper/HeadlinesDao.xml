@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiefeng.ssm.dao.HeadlinesDao">
+
+    <insert id="addHeadLine" parameterType="headlines">
+        insert into tb_headlines(img_url,create_for_course,create_time,priority)
+        VALUES(#{imgUrl},#{createForCourse},#{createTime},#{priority})
+    </insert>
+
+    <select id="getAllHeadLine" resultType="headlines">
+        select * from tb_headlines order by priority desc
+    </select>
+
+    <update id="updateHeadLine" parameterType="headLines">
+        update tb_headlines
+        <trim prefix="set" suffixOverrides=",">
+            <if test="imgUrl != null">
+                img_url = #{imgUrl},
+            </if>
+            <if test="createForCourse != null">
+                create_for_course = #{createForCourse},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="priority != null">
+                priority  = #{priority}
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+</mapper>

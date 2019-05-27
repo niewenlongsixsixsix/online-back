@@ -14,6 +14,7 @@ import com.jiefeng.ssm.util.PathUtil;
 import com.jiefeng.ssm.util.SaltUtil;
 import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class UserController {
      */
     @RequestMapping(value = "/getAllUser/{type}",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("USER:VIEW")
     @LoggerOrException(operationName = "获取所有用户信息")
     public Map<String,Object> getAllUser(@PathVariable Integer type) throws Exception {
 
@@ -86,6 +88,7 @@ public class UserController {
      */
     @RequestMapping(value = "/resetPassword/{userId}",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("USER:UPDATE")
     public Map<String,Object> resetPassword(@PathVariable Integer userId) throws UnsupportedEncodingException {
         Map<String,Object> modelMap = new HashMap<>();
 
@@ -193,7 +196,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @RequiresRoles("ADMIN")
+    @RequiresPermissions("USER:UPDATE")
     @RequestMapping(value = "/changeUserStatus/{userId}",method = RequestMethod.GET)
     @ResponseBody
     public Map<String,Object> changeUserStatus(@PathVariable Integer userId){
@@ -232,6 +235,12 @@ public class UserController {
         return modelMap;
     }
 
+    /**
+     * 更换用户的头像
+     * @param request
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/changeHeadImg",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> changeHeadImg(HttpServletRequest request) throws IOException {

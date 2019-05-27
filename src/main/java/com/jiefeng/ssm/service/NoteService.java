@@ -13,4 +13,8 @@ public interface NoteService {
     List<Note> getAllNoteByUserId();
 
     boolean updateNote(Note note);
+
+    List<Note> getAllNote();
+
+    List<Note> getHotNote();
 }

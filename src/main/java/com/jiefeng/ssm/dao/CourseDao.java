@@ -37,4 +37,10 @@ public interface CourseDao {
 
     List<Course> getAllCourseByLoveCourseId(Integer userId);
 
+    /**
+     * 0 最新课程  1 最热课程
+     * @param type
+     * @return
+     */
+    List<Course> hotOrNewCourse(Integer type);
 }

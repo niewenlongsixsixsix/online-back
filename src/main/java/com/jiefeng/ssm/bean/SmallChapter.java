@@ -25,7 +25,7 @@ public class SmallChapter implements Serializable {
   public SmallChapter() {
   }
 
-  public long getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -49,15 +49,6 @@ public class SmallChapter implements Serializable {
     this.videoUrl = videoUrl;
   }
 
-  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-  public Date getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
-
   public Integer getBigChapterId() {
     return bigChapterId;
   }
@@ -66,12 +57,21 @@ public class SmallChapter implements Serializable {
     this.bigChapterId = bigChapterId;
   }
 
-  public int getStatus() {
+  public Integer getStatus() {
     return status;
   }
 
-  public void setStatus(int status) {
+  public void setStatus(Integer status) {
     this.status = status;
+  }
+
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
   }
 
   @Override

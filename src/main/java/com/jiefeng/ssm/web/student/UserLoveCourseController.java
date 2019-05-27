@@ -97,6 +97,8 @@ public class UserLoveCourseController {
 
         UserOrAdminType principal = (UserOrAdminType) SecurityUtils.getSubject().getPrincipal();
 
+        System.out.println(principal.getType());
+
         UserExtend currentUser = (UserExtend) principal.getObject();
 
         Integer userId = currentUser.getId();
